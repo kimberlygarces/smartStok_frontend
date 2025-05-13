@@ -1,0 +1,63 @@
+
+
+<div class="auth-main">
+  <div class="auth-wrapper v3">
+    <div class="auth-form">
+      <div class="card mt-5">
+        <div class="card-body">
+          <a href="javascript:" class="d-flex justify-content-center mt-3">
+            <img src="assets/images/smartStock.jpg" alt="logo" style="width: 50%;" />
+          </a>
+ 
+     
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" />
+                <label for="floatingInput">Nombre</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" />
+                <label for="floatingInput">Apellido</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" />
+            <label for="floatingInput">Correo electronico</label>
+          </div>
+          <div class="form-floating mb-3">
+            <select class="form-select" id="rolUsuario" aria-label="Rol del usuario">
+                <option selected>Administrador</option>
+                <option value="2">Operario</option>
+            </select>
+            <label for="rolUsuario">Rol del usuario</label>
+        </div>
+        
+   
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="floatingInput" placeholder="name@example.com" />
+            <label for="floatingInput">Contraseña</label>
+          </div>
+          <div class="form-check mt-3s">
+            <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" checked="" />
+            <label class="form-check-label" for="customCheckc1">
+              <h5>
+                <span>Acepto los términos y condiciones.</span>
+              </h5>
+            </label>
+          </div>
+          <div class="d-grid mt-4">
+            <button type="button" class="btn btn-secondary p-2">Registrarse</button>
+          </div>
+          <hr />
+          <h5 class="d-flex justify-content-center">
+            <a [routerLink]="['/guest/login']">¿Ya tienes una cuenta?</a>
+          </h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

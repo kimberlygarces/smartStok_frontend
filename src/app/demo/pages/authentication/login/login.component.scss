@@ -1,0 +1,12 @@
+.user-not-found{
+    color: red;
+    font-size: 12px;
+    margin-top: 15px;
+    justify-content: center;
+    display: flex;
+    text-align: center;
+// animate__bounceInLeft;
+    animation: bounceInLeft; /* referring directly to the animation's @keyframe declaration */
+  animation-duration: 1s; /* don't forget to set a duration! */
+    
+}

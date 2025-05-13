@@ -1,0 +1,177 @@
+<div class="config_IA_div">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Configuración de Predicciones</h2>
+                    <label for="">Selecciona los cada uno de los parametros para poder realizar el analisis
+                        predictivo</label>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="configForm" (ngSubmit)="onSubmit()">
+                        <!-- Métricas a Predecir -->
+                        <div class="row mb-4">
+                            <!-- Productos -->
+                            <div class="col-md-7 metricas">
+                                <h4>Productos</h4>
+                                <!-- <label>Selecciona los productos a analizar</label> -->
+
+                                <!-- Buscador -->
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                                    <input type="text" class="form-control" placeholder="Buscar productos..."
+                                        [formControl]="searchTerm">
+                                </div>
+
+                                <!-- Lista de productos -->
+                                <div class="product-list-container">
+                                    <div class="form-group" formGroupName="productos">
+                                        <div class="form-check product-item" *ngFor="let product of filteredProducts">
+                                            <input class="form-check-input" type="checkbox"
+                                                [id]="'prod-' + getProductId(product)"
+                                                [formControlName]="getProductId(product)">
+                                            <label class="form-check-label" [for]="'prod-' + getProductId(product)"
+                                                [title]="product">
+                                                {{ product.length > 35 ? (product | slice:0:35) + '...' : product }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 metricas">
+                                <h4>Métricas a Predecir</h4>
+                                <!-- <label>Selecciona las métricas que deseas analizar</label> -->
+                                <div class="form-group mt-2" formArrayName="metricas">
+                                    <div class="form-check" *ngFor="let metrica of metricas; let i = index">
+                                        <input class="form-check-input" type="checkbox" [id]="metrica.id"
+                                            [formControlName]="i">
+                                        <label class="form-check-label" [for]="metrica.id">{{metrica.label}}</label>
+                                    </div>
+                                </div>
+                                <hr>
+                                <h4>¿Cuando?</h4>
+                                <!-- <label>Selecciona el enfoque</label> -->
+                                <div class="form-group mt-2" formArrayName="enfoques">
+                                    <div class="form-check" *ngFor="let enfoque of enfoques; let i = index">
+                                        <input class="form-check-input" type="checkbox" [id]="enfoque.id"
+                                            [formControlName]="i">
+                                        <label class="form-check-label" [for]="enfoque.id">{{enfoque.label}}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Actualización Automática -->
+                            <div class="col-md-5 metricas">
+                                <h4>Actualización Automática</h4>
+                                <label>Configura la actualización automática de predicciones</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="actualizacionAutomatica"
+                                        formControlName="actualizacionAutomatica">
+                                    <label class="form-check-label" for="actualizacionAutomatica">Activado</label>
+                                </div>
+                            </div>
+
+                            <!-- Rango de Tiempo -->
+                            <div class="col-md-6 metricas">
+                                <h4>Rango de Tiempo</h4>
+                                <label>Selecciona el periodo de predicción</label>
+                                <select class="form-select" formControlName="periodo">
+                                    <option *ngFor="let periodo of periodos" [value]="periodo.value">{{periodo.label}}
+                                    </option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12 text-end">
+                            <button type="submit" class="btn btn-secondary" [disabled]="isLoading"
+                                (click)="openNameConfigModal(nameConfigModal)">
+                                @if (isLoading) {
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Registrando...
+                                } @else {
+                                Registrar
+                                }
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1200">
+        <div *ngIf="showToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                {{ toastMessage }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para ingresar nombre de configuración -->
+<ng-template #nameConfigModal let-modal>
+    <div class="modal-body">
+        <div class="alert alert-warning mb-4">
+            <i class="bi bi-pencil-square me-2"></i>
+            <span class="fw-semibold"><strong>Identifica tu configuración</strong></span>
+            <!-- <p class="mb-0 mt-2 small">Asigna un nombre descriptivo para recuperarla fácilmente después</p> -->
+        </div>
+        
+        <div class="mb-3">
+            <label for="configName" class="form-label">Nombre de la configuración:</label>
+            <input type="text" class="form-control" id="configName" [(ngModel)]="nombreConfiguracion" 
+                   placeholder="Ej: Predicción de inventario Q3 - Productos premium">
+            
+        </div>
+    </div>
+    <div class="modal-footer border-top-0 pt-0">
+        <button type="button" class="btn btn-danger" (click)="modal.dismiss()">Cancelar</button>
+        <button type="button" class="btn btn-primary" 
+                [disabled]="!nombreConfiguracion?.trim()"
+                (click)="saveConfigName(modal)">
+            <i class="bi bi-check-lg me-1"></i> Guardar nombre
+        </button>
+    </div>
+</ng-template>
+<!-- Modal de registro exitoso -->
+<ng-template #modalContent let-modal>
+    <div class="modal-body text-center py-4">
+        <div class="alert alert-success mb-4">
+            <i class="bi bi-check-lg me-2"></i>
+            <span class="fw-semibold"><strong>Registro Existoso!</strong> Todos los cambios han sido guardados</span>.
+        </div>
+        
+        <div class="confirmation-box p-4 mb-4 rounded-3 bg-light">
+            <p class="text-start mb-3">
+                <i class="bi bi-info-circle me-2"></i>
+                ¿Deseas generar un informe detallado con la configuración actual?
+            </p>
+            
+            <p class="text-start small text-muted">
+                <i class="bi bi-envelope me-2"></i>
+                El informe será enviado automáticamente a tu correo electrónico registrado.
+            </p>
+            
+            <button (click)="reportGeneration()" class="btn btn-warning mt-2" [disabled]="isLoadingReport">
+                @if (isLoadingReport) {
+                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Generando Informe...
+                } @else {
+                    <i class="bi bi-file-earmark-pdf me-2"></i>
+                    Generar Informe 
+                }
+            </button>
+        </div>
+    </div>
+    
+    <div class="modal-footer border-top-0">
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" (click)="modal.close()"
+                (click)="configAlert()">Continuar</button>
+        </div>
+    </div>
+</ng-template>
