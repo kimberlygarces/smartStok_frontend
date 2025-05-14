@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router'; // Añade RouterLink aquí
+import { LoginServiceService } from '../service/login-service.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,8 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private loginService: LoginServiceService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -36,6 +38,19 @@ export class LoginComponent {
       rememberMe: [false]
     });
   }
+
+    username = 'andresrivero';
+    password_2 = '12345';
+
+    credencials = {
+      username: this.username,
+      password: this.password_2
+    }
+
+    /*this.loginService.login(credencials).subscribe({
+      next: (respuesta) => console.log('Login exitoso:', respuesta),
+      error: (error) => console.error('Error en login:', error)
+    });*/
 
   onSubmit() {
     if (this.loginForm.invalid) return;
@@ -47,6 +62,10 @@ export class LoginComponent {
     // Simulación de autenticación
     setTimeout(() => {
       if (email === this.validCredentials.email && password === this.validCredentials.password) {
+        this.loginService.login(this.credencials).subscribe({
+          next: (respuesta) => console.log('Login exitoso:', respuesta),
+          error: (error) => console.error('Error en login:', error)
+        });
         // Credenciales correctas - redirigir
         this.router.navigate(['/default']);
       } else {
