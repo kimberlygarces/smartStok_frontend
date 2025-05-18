@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router'; // Añade RouterLink aquí
+import { Router } from '@angular/router';
 import { LoginServiceService } from '../service/login-service.service';
 
 @Component({
@@ -10,8 +10,7 @@ import { LoginServiceService } from '../service/login-service.service';
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    // RouterLink // Añade esta línea
+    ReactiveFormsModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
@@ -21,7 +20,7 @@ export class LoginComponent {
   isLoading = false;
   errorMessage = false;
 
-  // Credenciales válidas simuladas
+  // Credenciales válidas simuladas (las mantengo por si las necesitas)
   private validCredentials = {
     email: 'kimberlygarces1994@gmail.com',
     password: '123456789'
@@ -39,48 +38,43 @@ export class LoginComponent {
     });
   }
 
-    username = 'andresrivero';
-    password_2 = '12345';
-
-    credencials = {
-      username: this.username,
-      password: this.password_2
-    }
-
-    /*this.loginService.login(credencials).subscribe({
-      next: (respuesta) => console.log('Login exitoso:', respuesta),
-      error: (error) => console.error('Error en login:', error)
-    });*/
-
   onSubmit() {
     if (this.loginForm.invalid) return;
 
     this.isLoading = true;
+    this.errorMessage = false;
 
     const { email, password } = this.loginForm.value;
 
-   console.log(this.loginForm.value);
-   
-
-    setTimeout(() => {
-      if (email === this.validCredentials.email && password === this.validCredentials.password) {
-        this.loginService.login(this.credencials).subscribe({
-          next: (respuesta) => console.log('Login exitoso:', respuesta),
-          error: (error) => console.error('Error en login:', error)
-        });
-        // Credenciales correctas - redirigir
-        // this.router.navigate(['/default']);
-      } else {
-            this.errorMessage = true;
-
-        // Credenciales incorrectas - mostrar error
-        // Mostrar alerta
-        // alert('Error: Credenciales incorrectas\nUsuario válido: kimberlygarces1994@gmail.com\nContraseña: 123456789');
+    console.log(this.loginForm.value);
+    
+    this.loginService.login(this.loginForm.value).subscribe({
+      next: (response: any) => { // Usamos 'any' para evitar problemas con el tipo
+        // Guardamos TODA la respuesta en localStorage
+        localStorage.setItem('authResponse', JSON.stringify(response));
+        
+        // Guardamos datos importantes por separado para fácil acceso
+        if (response.jwt) {
+          localStorage.setItem('token', response.jwt);
+        }
+        if (response.email) {
+          localStorage.setItem('email', response.email);
+        }
+        
+        // Redirigimos (mantengo tu ruta original)
+        this.router.navigate(['/default']);
+        
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error en login:', error);
+        this.errorMessage = true;
+        this.isLoading = false;
       }
-      this.isLoading = false;
-    }, 1500);
+    });
   }
 
+  // Métodos para acceder a los controles del formulario
   get email() { return this.loginForm.get('email'); }
   get password() { return this.loginForm.get('password'); }
 }
