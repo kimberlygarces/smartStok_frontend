@@ -19,7 +19,7 @@
                                 <!-- Buscador -->
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">
-                                        <i class="fas fa-search"></i>
+                                        <i class="ti ti-search"></i>
                                     </span>
                                     <input type="text" class="form-control" placeholder="Buscar productos..."
                                         [formControl]="searchTerm">
@@ -40,24 +40,43 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Dentro de tu formulario, en la sección de métricas -->
                             <div class="col-md-4 metricas">
                                 <h4>Métricas a Predecir</h4>
-                                <!-- <label>Selecciona las métricas que deseas analizar</label> -->
                                 <div class="form-group mt-2" formArrayName="metricas">
                                     <div class="form-check" *ngFor="let metrica of metricas; let i = index">
                                         <input class="form-check-input" type="checkbox" [id]="metrica.id"
-                                            [formControlName]="i">
+                                            [formControlName]="i" (change)="onMetricaChange()">
                                         <label class="form-check-label" [for]="metrica.id">{{metrica.label}}</label>
                                     </div>
                                 </div>
                                 <hr>
                                 <h4>¿Cuando?</h4>
-                                <!-- <label>Selecciona el enfoque</label> -->
                                 <div class="form-group mt-2" formArrayName="enfoques">
                                     <div class="form-check" *ngFor="let enfoque of enfoques; let i = index">
                                         <input class="form-check-input" type="checkbox" [id]="enfoque.id"
                                             [formControlName]="i">
                                         <label class="form-check-label" [for]="enfoque.id">{{enfoque.label}}</label>
+                                    </div>
+                                </div>
+
+                                <!-- Mostrar solo si "Niveles de Inventario" está seleccionado -->
+                                <div>
+                                    <div *ngIf="showStockMinimo()">
+
+                                        <h4>Stock mínimo</h4>
+                                        <div *ngIf="showStockMinimo()" class="form-group mt-2">
+                                            <input class="form" type="number" class="form-control" formControlName="stockMinimo">
+                                            <label class="form"></label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="showStockMaximo()">
+                                        <h4>Stock máximo</h4>
+                                        <div class="form-group mt-2">
+                                            <input class="form" type="number" class="form-control" formControlName="stockMaximo">
+                                            <label class="form"></label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -75,7 +94,7 @@
 
                             <!-- Rango de Tiempo -->
                             <div class="col-md-6 metricas">
-                                <h4>Rango de Tiempo</h4>
+                                <h4>Tiempo de predicción</h4>
                                 <label>Selecciona el periodo de predicción</label>
                                 <select class="form-select" formControlName="periodo">
                                     <option *ngFor="let periodo of periodos" [value]="periodo.value">{{periodo.label}}
@@ -120,19 +139,18 @@
             <span class="fw-semibold"><strong>Identifica tu configuración</strong></span>
             <!-- <p class="mb-0 mt-2 small">Asigna un nombre descriptivo para recuperarla fácilmente después</p> -->
         </div>
-        
+
         <div class="mb-3">
             <label for="configName" class="form-label">Nombre de la configuración:</label>
-            <input type="text" class="form-control" id="configName" [(ngModel)]="nombreConfiguracion" 
-                   placeholder="Ej: Predicción de inventario Q3 - Productos premium">
-            
+            <input type="text" class="form-control" id="configName" [(ngModel)]="nombreConfiguracion"
+                placeholder="Ej: Predicción de inventario Q3 - Productos premium">
+
         </div>
     </div>
     <div class="modal-footer border-top-0 pt-0">
         <button type="button" class="btn btn-danger" (click)="modal.dismiss()">Cancelar</button>
-        <button type="button" class="btn btn-primary" 
-                [disabled]="!nombreConfiguracion?.trim()"
-                (click)="saveConfigName(modal)">
+        <button type="button" class="btn btn-primary" [disabled]="!nombreConfiguracion?.trim()"
+            (click)="saveConfigName(modal)">
             <i class="bi bi-check-lg me-1"></i> Guardar nombre
         </button>
     </div>
@@ -144,30 +162,30 @@
             <i class="bi bi-check-lg me-2"></i>
             <span class="fw-semibold"><strong>Registro Existoso!</strong> Todos los cambios han sido guardados</span>.
         </div>
-        
+
         <div class="confirmation-box p-4 mb-4 rounded-3 bg-light">
             <p class="text-start mb-3">
                 <i class="bi bi-info-circle me-2"></i>
                 ¿Deseas generar un informe detallado con la configuración actual?
             </p>
-            
+
             <p class="text-start small text-muted">
                 <i class="bi bi-envelope me-2"></i>
                 El informe será enviado automáticamente a tu correo electrónico registrado.
             </p>
-            
+
             <button (click)="reportGeneration()" class="btn btn-warning mt-2" [disabled]="isLoadingReport">
                 @if (isLoadingReport) {
-                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    Generando Informe...
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Generando Informe...
                 } @else {
-                    <i class="bi bi-file-earmark-pdf me-2"></i>
-                    Generar Informe 
+                <i class="bi bi-file-earmark-pdf me-2"></i>
+                Generar Informe
                 }
             </button>
         </div>
     </div>
-    
+
     <div class="modal-footer border-top-0">
         <div class="modal-footer">
             <button type="button" class="btn btn-success" (click)="modal.close()"

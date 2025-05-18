@@ -35,6 +35,10 @@ const routes: Routes = [
       loadComponent: () => import('./demo/register-user/register-user.component').then((c) => c.RegisterUserComponent)
       },  
       {
+        path: 'ListUser',
+      loadComponent: () => import('./demo/list-user/list-user.component').then((c) => c.ListUserComponent)
+      },  
+      {
         path: 'Config_IA',
         loadComponent: () => import('./demo/config_IA/config-ia/config-ia.component').then((c) => c.ConfigIaComponent)
       }

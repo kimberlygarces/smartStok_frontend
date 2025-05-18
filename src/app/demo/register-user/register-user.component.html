@@ -1,1 +1,104 @@
-<p>register-user works!</p>
+<div class="alerts_div">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Registro de Cliente</h2>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="registerUser" (ngSubmit)="onSubmit(modalContent)">
+                        <!-- Primera fila de inputs -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="firstName" 
+                                           formControlName="FirstName" placeholder="Nombre">
+                                    <label for="firstName">Nombre</label>
+                                    <div *ngIf="registerUser.get('FirstName')?.invalid && 
+                                              (registerUser.get('FirstName')?.dirty || registerUser.get('FirstName')?.touched)"
+                                         class="text-danger small mt-1">
+                                        El nombre es requerido
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="lastName" 
+                                           formControlName="LastName" placeholder="Apellido">
+                                    <label for="lastName">Apellido</label>
+                                    <div *ngIf="registerUser.get('LastName')?.invalid && 
+                                              (registerUser.get('LastName')?.dirty || registerUser.get('LastName')?.touched)"
+                                         class="text-danger small mt-1">
+                                        El apellido es requerido
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Segunda fila de inputs -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="email" 
+                                           formControlName="email" placeholder="Correo electrónico">
+                                    <label for="email">Correo electrónico</label>
+                                    <div *ngIf="registerUser.get('email')?.invalid && 
+                                              (registerUser.get('email')?.dirty || registerUser.get('email')?.touched)"
+                                         class="text-danger small mt-1">
+                                        <span *ngIf="registerUser.get('email')?.errors?.['required']">
+                                            El correo es requerido
+                                        </span>
+                                        <span *ngIf="registerUser.get('email')?.errors?.['email']">
+                                            Ingrese un correo válido
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="tel" class="form-control" id="celular" 
+                                           formControlName="celular" placeholder="Teléfono">
+                                    <label for="celular">Teléfono</label>
+                                    <div *ngIf="registerUser.get('celular')?.invalid && 
+                                              (registerUser.get('celular')?.dirty || registerUser.get('celular')?.touched)"
+                                         class="text-danger small mt-1">
+                                        El teléfono es requerido
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12 text-end">
+                                <button type="submit" class="btn btn-primary" [disabled]="registerUser.invalid || isLoading">
+                                    @if (isLoading) {
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        Registrando...
+                                    } @else {
+                                        Registrar Cliente
+                                    }
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación -->
+<ng-template #modalContent let-modal>
+    <div class="modal-body text-center">
+        <div class="alert alert-success mb-4">
+            <i class="bi bi-check-lg me-2"></i>
+            <span class="fw-semibold"><strong>¡Cliente Registrado!</strong> Todos los datos han sido guardados</span>.
+        </div>
+        <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+        <p class="mt-3">El cliente ha sido registrado exitosamente.</p>
+        <p>Se ha enviado un correo de confirmación al email proporcionado.</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="closeModalAndRedirect(modal)">Aceptar</button>
+    </div>
+</ng-template>

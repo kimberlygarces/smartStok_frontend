@@ -115,7 +115,7 @@ export const NavigationItems: NavigationItem[] = [
             id: 'usuarios_registrados',
             title: 'Usuarios Registrados',
             type: 'item',
-            url: '/User_List', // Asegúrate de que esta ruta sea válida en tu app
+            url: '/ListUser', // Asegúrate de que esta ruta sea válida en tu app
             target: false,
             breadcrumbs: false
           }

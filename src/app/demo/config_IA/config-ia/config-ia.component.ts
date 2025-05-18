@@ -15,9 +15,9 @@ import { ViewChild } from '@angular/core';
   styleUrls: ['./config-ia.component.scss']
 })
 export class ConfigIaComponent {
-      @ViewChild('modalContent', { static: true }) modalContent: any;
+  @ViewChild('modalContent', { static: true }) modalContent: any;
 
-    nombreConfiguracion: string = '';
+  nombreConfiguracion: string = '';
 
   showToast = false;
   toastMessage = '';
@@ -28,7 +28,9 @@ export class ConfigIaComponent {
 
   searchTerm = new FormControl('');
   toastType: 'success' | 'danger' = 'success';
-  allProducts = [
+
+
+    allProducts = [
     "FANCY FEAST PETITS FIL POLL Y QUES X85GR",
     "PROPLAN VETERINARY DIET CANINE NFX2 72K",
     "PROPLAN WET CAT STERILIZED CHICKEN 85GR",
@@ -107,13 +109,11 @@ export class ConfigIaComponent {
   periodos = [
     { value: '1 mes', label: '1 mes' },
     { value: '3 meses', label: '3 meses' },
-    { value: '6 meses', label: '6 meses' },
-    { value: '1 año', label: '1 año' },
-    { value: '2 año', label: '2 años' },
-    { value: '3 año', label: '3 años' }
+    { value: '5 meses', label: '6 meses' }
+
   ];
 
-  constructor(private fb: FormBuilder, 
+  constructor(private fb: FormBuilder,
     private router: Router, private modalService: NgbModal) {
     const productControls = this.allProducts.reduce((acc, product) => {
       acc[this.getProductId(product)] = new FormControl(false);
@@ -125,7 +125,9 @@ export class ConfigIaComponent {
       productos: this.fb.group(productControls),
       enfoques: this.fb.array(this.enfoques.map(() => false)),
       actualizacionAutomatica: [true],
-      periodo: ['3 meses']
+      periodo: ['3 meses'],
+      stockMinimo: [null],  // Nuevo control para stock mínimo
+      stockMaximo: [null]   // Nuevo control para stock máximo
     });
 
     this.searchTerm.valueChanges.subscribe(term => {
@@ -135,6 +137,37 @@ export class ConfigIaComponent {
 
   public getProductId(product: string): string {
     return product.replace(/[^a-zA-Z0-9]/g, '_');
+  }
+
+      showStockMinimo(): boolean {
+        const enfoquesArray = this.configForm.get('enfoques')?.value;
+        return enfoquesArray && enfoquesArray[0]; // enfoque1 es el índice 0
+    }
+
+    // Mostrar input de stock máximo solo si enfoque2 está seleccionado
+    showStockMaximo(): boolean {
+        const enfoquesArray = this.configForm.get('enfoques')?.value;
+        return enfoquesArray && enfoquesArray[1]; // enfoque2 es el índice 1
+    }
+
+    // Método para detectar cambios en los enfoques
+    onEnfoqueChange() {
+        // Limpiar los valores cuando se deselecciona un enfoque
+        if (!this.showStockMinimo()) {
+            this.configForm.get('stockMinimo')?.reset();
+        }
+        if (!this.showStockMaximo()) {
+            this.configForm.get('stockMaximo')?.reset();
+        }
+    }
+
+
+
+
+  // Método para detectar cambios en las métricas
+  onMetricaChange() {
+    // Forzar la actualización de la vista
+    this.configForm.updateValueAndValidity();
   }
 
   reportGeneration() {
@@ -152,16 +185,16 @@ export class ConfigIaComponent {
     });
   }
 
-    saveConfigName(modal: any) {
-        if (!this.nombreConfiguracion || this.nombreConfiguracion.trim() === '') {
-          this.showToastMessage('Por favor ingresa un nombre para la configuración', '', false);
-          return;
-        }
-        
-        modal.close();
-        this.onSubmit();
-        this.openModal(this.modalContent);
+  saveConfigName(modal: any) {
+    if (!this.nombreConfiguracion || this.nombreConfiguracion.trim() === '') {
+      this.showToastMessage('Por favor ingresa un nombre para la configuración', '', false);
+      return;
     }
+
+    modal.close();
+    this.onSubmit();
+    this.openModal(this.modalContent);
+  }
   openModal(content: any) {
     setTimeout(() => {
       this.modalService.open(content, {
@@ -201,7 +234,7 @@ export class ConfigIaComponent {
     }, 1500);
   }
 
-  private showToastMessage(message: string, header: string = '', isSuccess: boolean = true) {
+  private showToastMessage(message: string, header: string = 'bg-success text-white', isSuccess: boolean = true) {
     this.toastMessage = message;
     this.showToast = true;
 
