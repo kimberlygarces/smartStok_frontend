@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ViewChild } from '@angular/core';
+import { ServiceGeneralService } from '../../../theme/shared/service/service-general.service';
 
 @Component({
   selector: 'app-config-ia',
@@ -30,7 +31,7 @@ export class ConfigIaComponent {
   toastType: 'success' | 'danger' = 'success';
 
 
-    allProducts = [
+  allProducts = [
     "FANCY FEAST PETITS FIL POLL Y QUES X85GR",
     "PROPLAN VETERINARY DIET CANINE NFX2 72K",
     "PROPLAN WET CAT STERILIZED CHICKEN 85GR",
@@ -114,7 +115,8 @@ export class ConfigIaComponent {
   ];
 
   constructor(private fb: FormBuilder,
-    private router: Router, private modalService: NgbModal) {
+    private router: Router, private modalService: NgbModal,
+    private _serviceGeneral: ServiceGeneralService) {
     const productControls = this.allProducts.reduce((acc, product) => {
       acc[this.getProductId(product)] = new FormControl(false);
       return acc;
@@ -139,27 +141,27 @@ export class ConfigIaComponent {
     return product.replace(/[^a-zA-Z0-9]/g, '_');
   }
 
-      showStockMinimo(): boolean {
-        const enfoquesArray = this.configForm.get('enfoques')?.value;
-        return enfoquesArray && enfoquesArray[0]; // enfoque1 es el índice 0
-    }
+  showStockMinimo(): boolean {
+    const enfoquesArray = this.configForm.get('enfoques')?.value;
+    return enfoquesArray && enfoquesArray[0]; // enfoque1 es el índice 0
+  }
 
-    // Mostrar input de stock máximo solo si enfoque2 está seleccionado
-    showStockMaximo(): boolean {
-        const enfoquesArray = this.configForm.get('enfoques')?.value;
-        return enfoquesArray && enfoquesArray[1]; // enfoque2 es el índice 1
-    }
+  // Mostrar input de stock máximo solo si enfoque2 está seleccionado
+  showStockMaximo(): boolean {
+    const enfoquesArray = this.configForm.get('enfoques')?.value;
+    return enfoquesArray && enfoquesArray[1]; // enfoque2 es el índice 1
+  }
 
-    // Método para detectar cambios en los enfoques
-    onEnfoqueChange() {
-        // Limpiar los valores cuando se deselecciona un enfoque
-        if (!this.showStockMinimo()) {
-            this.configForm.get('stockMinimo')?.reset();
-        }
-        if (!this.showStockMaximo()) {
-            this.configForm.get('stockMaximo')?.reset();
-        }
+  // Método para detectar cambios en los enfoques
+  onEnfoqueChange() {
+    // Limpiar los valores cuando se deselecciona un enfoque
+    if (!this.showStockMinimo()) {
+      this.configForm.get('stockMinimo')?.reset();
     }
+    if (!this.showStockMaximo()) {
+      this.configForm.get('stockMaximo')?.reset();
+    }
+  }
 
 
 
@@ -227,11 +229,16 @@ export class ConfigIaComponent {
 
   onSubmit() {
     this.isLoading = true;
-
+    this._serviceGeneral.configIA(this.configForm).subscribe({
+      next: (respuesta) => console.log('Registro exitoso:', respuesta),
+      error: (error) => console.error('Error en registro:', error)
+    });
     setTimeout(() => {
       console.log('Configuración guardada:', this.getSelectedOptions());
       this.isLoading = false;
     }, 1500);
+
+
   }
 
   private showToastMessage(message: string, header: string = 'bg-success text-white', isSuccess: boolean = true) {

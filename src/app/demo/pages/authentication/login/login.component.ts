@@ -59,7 +59,9 @@ export class LoginComponent {
 
     const { email, password } = this.loginForm.value;
 
-    // Simulación de autenticación
+   console.log(this.loginForm.value);
+   
+
     setTimeout(() => {
       if (email === this.validCredentials.email && password === this.validCredentials.password) {
         this.loginService.login(this.credencials).subscribe({
@@ -67,7 +69,7 @@ export class LoginComponent {
           error: (error) => console.error('Error en login:', error)
         });
         // Credenciales correctas - redirigir
-        this.router.navigate(['/default']);
+        // this.router.navigate(['/default']);
       } else {
             this.errorMessage = true;
 
