@@ -30,14 +30,12 @@ jobs:
   - script: |
       npm install -g @angular/cli
       npm install --legacy-peer-deps
-      ng build --configuration no-env
-    displayName: 'Build Angular con configuración no-env'
-
-
+      ng build --configuration production
+    displayName: 'Build Angular con configuración production'
 
   - task: AzureStaticWebApp@0
     inputs:
       azure_static_web_apps_api_token: $(AZURE_STATIC_WEB_APPS_API_TOKEN_LIVELY_STONE_0CAE6200F)
       app_location: "/" 
       api_location: "" 
-      output_location: "dist/smart-stock-fr"
+      output_location: "dist"
