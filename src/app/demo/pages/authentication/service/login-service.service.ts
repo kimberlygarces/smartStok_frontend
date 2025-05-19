@@ -9,7 +9,7 @@ export class LoginServiceService {
 
   constructor(private http: HttpClient) { }
 
-  private apiUrl = 'http://localhost:8081/smartstock-services/api/auth/log-in';
+  private apiUrl = 'https://smartstockv2-cweudvaub2hxa8cf.canadacentral-01.azurewebsites.net/api/auth/log-in';
 
   login(usuario: {email: string; password: string}): Observable<any[]> {
     return this.http.post<any[]>(this.apiUrl, usuario);
