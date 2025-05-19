@@ -29,9 +29,11 @@ jobs:
 
   - script: |
       npm install -g @angular/cli
-      npm install
+      npm install --legacy-peer-deps
       ng build --configuration no-env
     displayName: 'Build Angular con configuración no-env'
+
+
 
   - task: AzureStaticWebApp@0
     inputs:
