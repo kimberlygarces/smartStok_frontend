@@ -53,11 +53,11 @@
                                 </div>
                                 <hr>
                                 <h4>¿Cuando?</h4>
-                                <div class="form-group mt-2" formArrayName="enfoques">
-                                    <div class="form-check" *ngFor="let enfoque of enfoques; let i = index">
-                                        <input class="form-check-input" type="checkbox" [id]="enfoque.id"
+                                <div class="form-group mt-2" formArrayName="subjects">
+                                    <div class="form-check" *ngFor="let subject of subjects; let i = index">
+                                        <input class="form-check-input" type="checkbox" [id]="subject.id"
                                             [formControlName]="i">
-                                        <label class="form-check-label" [for]="enfoque.id">{{enfoque.label}}</label>
+                                        <label class="form-check-label" [for]="subject.id">{{subject.label}}</label>
                                     </div>
                                 </div>
 

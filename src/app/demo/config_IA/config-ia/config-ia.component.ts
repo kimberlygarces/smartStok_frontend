@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ViewChild } from '@angular/core';
 import { ServiceGeneralService } from '../../../theme/shared/service/service-general.service';
@@ -17,19 +17,16 @@ import { ServiceGeneralService } from '../../../theme/shared/service/service-gen
 })
 export class ConfigIaComponent {
   @ViewChild('modalContent', { static: true }) modalContent: any;
+  @ViewChild('nameConfigModal', { static: true }) nameConfigModal: any;
 
   nombreConfiguracion: string = '';
-
   showToast = false;
   toastMessage = '';
-  toastClass = 'bg-success text-white';
   configForm: FormGroup;
   isLoading = false;
   isLoadingReport = false;
-
   searchTerm = new FormControl('');
   toastType: 'success' | 'danger' = 'success';
-
 
   allProducts = [
     "FANCY FEAST PETITS FIL POLL Y QUES X85GR",
@@ -97,26 +94,27 @@ export class ConfigIaComponent {
   filteredProducts = [...this.allProducts];
 
   metricas = [
-    { id: 'ventasProducto', label: 'Ventas por Producto' },
-    { id: 'nivelesInventario', label: 'Niveles de Inventario' }
+    { id: 1, label: 'Ventas por Producto' },
+    { id: 2, label: 'Niveles de Inventario' }
   ];
 
-  enfoques = [
-    { id: 'enfoque1', label: 'El stock este minimo' },
-    { id: 'enfoque2', label: 'Sobre Abastecimiento' },
-    { id: 'enfoque3', label: 'Seguimiento' }
+  subjects = [
+    { id: 1, label: 'El stock este minimo' },
+    { id: 2, label: 'Sobre Abastecimiento' }
   ];
 
   periodos = [
     { value: '1 mes', label: '1 mes' },
     { value: '3 meses', label: '3 meses' },
     { value: '5 meses', label: '6 meses' }
-
   ];
 
-  constructor(private fb: FormBuilder,
-    private router: Router, private modalService: NgbModal,
-    private _serviceGeneral: ServiceGeneralService) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private modalService: NgbModal,
+    private _serviceGeneral: ServiceGeneralService
+  ) {
     const productControls = this.allProducts.reduce((acc, product) => {
       acc[this.getProductId(product)] = new FormControl(false);
       return acc;
@@ -125,11 +123,11 @@ export class ConfigIaComponent {
     this.configForm = this.fb.group({
       metricas: this.fb.array(this.metricas.map(() => false)),
       productos: this.fb.group(productControls),
-      enfoques: this.fb.array(this.enfoques.map(() => false)),
+      subjects: this.fb.array(this.subjects.map(() => false)),
       actualizacionAutomatica: [true],
       periodo: ['3 meses'],
-      stockMinimo: [null],  // Nuevo control para stock mínimo
-      stockMaximo: [null]   // Nuevo control para stock máximo
+      stockMinimo: [null],
+      stockMaximo: [null]
     });
 
     this.searchTerm.valueChanges.subscribe(term => {
@@ -137,24 +135,21 @@ export class ConfigIaComponent {
     });
   }
 
-  public getProductId(product: string): string {
+  getProductId(product: string): string {
     return product.replace(/[^a-zA-Z0-9]/g, '_');
   }
 
   showStockMinimo(): boolean {
-    const enfoquesArray = this.configForm.get('enfoques')?.value;
-    return enfoquesArray && enfoquesArray[0]; // enfoque1 es el índice 0
+    const subjectsArray = this.configForm.get('subjects')?.value;
+    return subjectsArray && subjectsArray[0];
   }
 
-  // Mostrar input de stock máximo solo si enfoque2 está seleccionado
   showStockMaximo(): boolean {
-    const enfoquesArray = this.configForm.get('enfoques')?.value;
-    return enfoquesArray && enfoquesArray[1]; // enfoque2 es el índice 1
+    const subjectsArray = this.configForm.get('subjects')?.value;
+    return subjectsArray && subjectsArray[1];
   }
 
-  // Método para detectar cambios en los enfoques
-  onEnfoqueChange() {
-    // Limpiar los valores cuando se deselecciona un enfoque
+  onSubjectChange() {
     if (!this.showStockMinimo()) {
       this.configForm.get('stockMinimo')?.reset();
     }
@@ -163,23 +158,111 @@ export class ConfigIaComponent {
     }
   }
 
-
-
-
-  // Método para detectar cambios en las métricas
   onMetricaChange() {
-    // Forzar la actualización de la vista
     this.configForm.updateValueAndValidity();
   }
 
-  reportGeneration() {
-    this.isLoadingReport = true;
-    setTimeout(() => {
-      this.isLoadingReport = false;
-      this.showToastMessage('Reporte generado exitosamente!');
-    }, 1500);
+  onSubmit() {
+    if (this.configForm.invalid) {
+      this.showToastMessage('Por favor completa todos los campos requeridos', false);
+      return;
+    }
+    this.openNameConfigModal(this.nameConfigModal);
   }
 
+  saveConfigName(modal: any) {
+    if (!this.nombreConfiguracion || this.nombreConfiguracion.trim() === '') {
+      this.showToastMessage('Por favor ingresa un nombre para la configuración', false);
+      return;
+    }
+
+    modal.close();
+
+    // Obtener el username del localStorage de forma segura
+    const getUsernameFromStorage = (): string => {
+      try {
+        const authResponse = localStorage.getItem('authResponse');
+        if (!authResponse) return 'prueba'; // Fallback si no existe
+
+        const parsedData = JSON.parse(authResponse) as {
+          username?: string;
+          message?: string;
+          codeStatus?: number;
+          jwt?: string;
+        };
+
+        return parsedData.username || 'prueba'; // Usa el username o fallback
+      } catch (error) {
+        console.error('Error al leer authResponse del localStorage:', error);
+        return 'prueba'; // Fallback en caso de error
+      }
+    };
+
+    // Preparar datos en la estructura requerida
+    const configData = {
+      namePrediction: this.nombreConfiguracion,
+      metrics: this.getSelectedMetricsWithConsecutive(),
+      products: this.getSelectedProductsWithConsecutive(),
+      subjects: this.getSelectedSubjectsWithConsecutive(),
+      automaticUpdated: this.configForm.get('actualizacionAutomatica')?.value ? 1 : 0,
+      period: this.configForm.get('periodo')?.value,
+      stockMinim: this.configForm.get('stockMinimo')?.value,
+      stockMax: this.configForm.get('stockMaximo')?.value,
+      username: getUsernameFromStorage() // Obtenemos el username correctamente
+    };
+
+    console.log('Datos a enviar:', configData); // Para depuración
+
+    this.isLoading = true;
+
+    this._serviceGeneral.configIA(configData).subscribe({
+      next: (respuesta) => {
+console.log(respuesta)
+
+        this.isLoading = false;
+        this.openModal(this.modalContent);
+        this.showToastMessage('Configuración guardada exitosamente!');
+      },
+      error: (error) => {
+        console.error('Error en registro:', error);
+        this.isLoading = false;
+        this.showToastMessage('Error al guardar la configuración', false);
+      }
+    });
+  }
+
+  private getSelectedMetricsWithConsecutive(): any[] {
+    const selectedMetrics = this.getSelected('metricas', this.metricas);
+    return selectedMetrics.map((id, index) => ({
+      [`consecutiveMetric`]: id,
+    }));
+  }
+
+  private getSelectedProductsWithConsecutive(): any[] {
+    const productosGroup = this.configForm.get('productos')?.value;
+    const selectedProducts = Object.keys(productosGroup)
+      .filter(key => productosGroup[key])
+      .map(key => {
+        const product = this.allProducts.find(p => this.getProductId(p) === key);
+        return product || '';
+      })
+      .filter(p => p !== '');
+
+    return selectedProducts.map((product, index) => ({
+      [`consecutiveProduct`]: index + 1,
+      name: product
+    }));
+  }
+
+  private getSelectedSubjectsWithConsecutive(): any[] {
+    const selectedSubjects = this.getSelected('subjects', this.subjects);
+    return selectedSubjects.map((id, index) => ({
+      [`consecutiveSubject`]: id,
+
+    }));
+  }
+
+  // ... (mantener los demás métodos igual)
   openNameConfigModal(content: any) {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
@@ -187,22 +270,18 @@ export class ConfigIaComponent {
     });
   }
 
-  saveConfigName(modal: any) {
-    if (!this.nombreConfiguracion || this.nombreConfiguracion.trim() === '') {
-      this.showToastMessage('Por favor ingresa un nombre para la configuración', '', false);
-      return;
-    }
-
-    modal.close();
-    this.onSubmit();
-    this.openModal(this.modalContent);
-  }
   openModal(content: any) {
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      size: 'lg'
+    });
+  }
+
+  reportGeneration() {
+    this.isLoadingReport = true;
     setTimeout(() => {
-      this.modalService.open(content, {
-        ariaLabelledBy: 'modal-basic-title',
-        size: 'lg'
-      });
+      this.isLoadingReport = false;
+      this.showToastMessage('Reporte generado exitosamente!');
     }, 1500);
   }
 
@@ -217,9 +296,9 @@ export class ConfigIaComponent {
     );
   }
 
-  triggerToast(message: string, type: 'success' | 'danger' = 'success') {
+  private showToastMessage(message: string, isSuccess: boolean = true) {
     this.toastMessage = message;
-    this.toastType = type;
+    this.toastType = isSuccess ? 'success' : 'danger';
     this.showToast = true;
 
     setTimeout(() => {
@@ -227,52 +306,7 @@ export class ConfigIaComponent {
     }, 3000);
   }
 
-  onSubmit() {
-    this.isLoading = true;
-    this._serviceGeneral.configIA(this.configForm).subscribe({
-      next: (respuesta) => console.log('Registro exitoso:', respuesta),
-      error: (error) => console.error('Error en registro:', error)
-    });
-    setTimeout(() => {
-      console.log('Configuración guardada:', this.getSelectedOptions());
-      this.isLoading = false;
-    }, 1500);
-
-
-  }
-
-  private showToastMessage(message: string, header: string = 'bg-success text-white', isSuccess: boolean = true) {
-    this.toastMessage = message;
-    this.showToast = true;
-
-    setTimeout(() => {
-      this.showToast = false;
-    }, 7000);
-  }
-
-  private getSelectedOptions() {
-    return {
-      nombreConfiguracion: this.nombreConfiguracion,
-      metricas: this.getSelected('metricas', this.metricas),
-      productos: this.getSelectedProductos(),
-      enfoques: this.getSelected('enfoques', this.enfoques),
-      actualizacionAutomatica: this.configForm.get('actualizacionAutomatica')?.value,
-      periodo: this.configForm.get('periodo')?.value
-    };
-  }
-
-  private getSelectedProductos(): string[] {
-    const productosGroup = this.configForm.get('productos')?.value;
-    return Object.keys(productosGroup)
-      .filter(key => productosGroup[key])
-      .map(key => {
-        const product = this.allProducts.find(p => this.getProductId(p) === key);
-        return product || '';
-      })
-      .filter(p => p !== '');
-  }
-
-  private getSelected(formArrayName: string, options: any[]): string[] {
+  private getSelected(formArrayName: string, options: any[]): any[] {
     return this.configForm.get(formArrayName)?.value
       .map((checked: boolean, i: number) => checked ? options[i].id : null)
       .filter((v: null) => v !== null);
