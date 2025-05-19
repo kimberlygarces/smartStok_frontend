@@ -30,8 +30,8 @@ jobs:
   - script: |
       npm install -g @angular/cli
       npm install --legacy-peer-deps
-      ng build --configuration production
-    displayName: 'Build Angular con configuración production'
+      ng build --configuration development
+    displayName: 'Build Angular con configuración develpopment'
 
   - task: AzureStaticWebApp@0
     inputs:

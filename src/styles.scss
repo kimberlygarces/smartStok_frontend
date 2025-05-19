@@ -1,4 +1,14 @@
+/* You can add global styles to this file, and also import other style files */
+/**======================================================================
+=========================================================================
+Template Name: Berry - Most Complete Angular Admin Template
+Author: CodedThemes
+Support: https://codedthemes.support-hub.io/
+File: style.css
+=========================================================================
+=================================================================================== */
 
+// main framework
 @import 'node_modules/bootstrap/scss/functions';
 @import 'node_modules/bootstrap/scss/variables';
 @import 'node_modules/bootstrap/scss/variables-dark';
@@ -28,6 +38,6 @@
 @import 'scss/style-preset.scss';
 
 // fonts
-@import url('./scss/fonts/berry/Berry-icons.css');
+@import url('scss/fonts/Berry/Berry-icons.css'); /** custom font icons - Berry **/
 @import 'scss/fonts/tabler-icons.min.css';
 @import 'scss/fonts/phosphor/duotone/style.css';
