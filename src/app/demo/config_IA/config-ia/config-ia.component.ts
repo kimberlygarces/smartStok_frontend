@@ -217,7 +217,7 @@ export class ConfigIaComponent {
 
     this._serviceGeneral.configIA(configData).subscribe({
       next: (respuesta) => {
-console.log(respuesta)
+// console.log(respuesta)
 
         this.isLoading = false;
         this.openModal(this.modalContent);
