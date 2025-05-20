@@ -169,7 +169,7 @@ export class AlertsRegisterComponent {
     try {
       const notificacion = this.crearNotificacion();
       console.log('Datos a enviar:', notificacion);
-      // this.enviarNotificacion(notificacion, modalContent);
+      this.enviarNotificacion(notificacion, modalContent);
 
       this.registerAlert(this.alertaForm.value, modalContent);
 

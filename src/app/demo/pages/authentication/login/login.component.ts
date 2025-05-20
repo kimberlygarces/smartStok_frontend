@@ -26,11 +26,27 @@ export class LoginComponent {
   isLoading = false;
   errorMessage = false;
 
-  // Credenciales válidas simuladas (las mantengo por si las necesitas)
-  private validCredentials = {
-    email: 'kimberlygarces1994@gmail.com',
-    password: '123456789'
-  };
+  // Credenciales válidas para los tres usuarios
+  private validUsers = [
+    {
+      email: 'kimberlygarces1994@gmail.com',
+      password: '123456789',
+      username: 'Kimberly Garces',
+      role: 'user'
+    },
+    {
+      email: 'andres.rivero@example.com',
+      password: 'rivero123',
+      username: 'Andres Rivero',
+      role: 'user'
+    },
+    {
+      email: 'andres.restrepo@example.com',
+      password: 'restrepo123',
+      username: 'Andres Restrepo',
+      role: 'user'
+    }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -45,58 +61,68 @@ export class LoginComponent {
     });
   }
 
-
-
-  
   onSubmit() {
+    this.isLoading = true;
+
     if (this.loginForm.invalid) return;
 
-    this.isLoading = true;
     this.errorMessage = false;
 
-    const { email, password } = this.loginForm.value;
+    const { email, password, rememberMe } = this.loginForm.value;
 
-    console.log(this.loginForm.value);
-    
-    this.loginService.login(this.loginForm.value).subscribe({
-      next: (response: any) => { // Usamos 'any' para evitar problemas con el tipo
-        // Guardamos TODA la respuesta en localStorage
-        localStorage.setItem('authResponse', JSON.stringify(response));
-        
-        // Guardamos datos importantes por separado para fácil acceso
-        if (response.jwt) {
-          localStorage.setItem('token', response.jwt);
-        }
-        if (response.email) {
-          localStorage.setItem('email', response.email);
-        }
-        
-        // Redirigimos (mantengo tu ruta original)
-        this.router.navigate(['/default']);
-        
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error en login:', error);
-        this.errorMessage = true;
-        this.isLoading = false;
-                this.openModal(this.modalContent);
+    // Buscamos si las credenciales coinciden con algún usuario válido
+    const validUser = this.validUsers.find(user => 
+      user.email === email && user.password === password
+    );
 
+    if (validUser) {
+      // Simulamos una respuesta exitosa del servidor
+      const mockResponse = {
+        jwt: 'mock-jwt-token',
+        email: validUser.email,
+        username: validUser.username,
+        role: validUser.role
+      };
+
+      // Guardamos la respuesta mock en localStorage
+      localStorage.setItem('authResponse', JSON.stringify(mockResponse));
+      localStorage.setItem('token', mockResponse.jwt);
+      localStorage.setItem('email', mockResponse.email);
+      localStorage.setItem('username', mockResponse.username);
+
+      // Si el usuario marcó "recordarme", guardamos el email
+      if (rememberMe) {
+        localStorage.setItem('rememberedEmail', email);
+      } else {
+        localStorage.removeItem('rememberedEmail');
       }
-    });
+
+      setTimeout(() => {
+        this.isLoading = false;
+        this.router.navigate(['/default']);
+      }, 1000);
+    } else {
+      // Credenciales incorrectas
+      this.errorMessage = true;
+
+      setTimeout(() => {
+        this.isLoading = false;
+        this.openModal(this.modalContent);
+      }, 1000);
+    }
   }
-openModal(content: any) {
+
+  openModal(content: any) {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
-      size: 'sm', // Puedes cambiar a 'lg', 'xl' o dejarlo vacío para el tamaño por defecto
-      scrollable: true, // Esto habilita el scroll dentro del modal si el contenido es muy largo
-      backdrop: 'static', // Esto evita que el modal se cierre al hacer clic fuera
-      keyboard: false, // Esto evita que el modal se cierre con la tecla ESC
-
-              centered: true
-
+      size: 'sm',
+      scrollable: true,
+      backdrop: 'static',
+      keyboard: false,
+      centered: true
     });
-}
+  }
+
   // Métodos para acceder a los controles del formulario
   get email() { return this.loginForm.get('email'); }
   get password() { return this.loginForm.get('password'); }
