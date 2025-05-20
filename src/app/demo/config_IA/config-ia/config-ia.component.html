@@ -107,12 +107,7 @@
                         <div class="col-md-12 text-end">
                             <button type="submit" class="btn btn-secondary" [disabled]="isLoading"
                                 (click)="openNameConfigModal(nameConfigModal)">
-                                @if (isLoading) {
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                Registrando...
-                                } @else {
-                                Registrar
-                                }
+                              Continuar
                             </button>
                         </div>
                     </form>
@@ -122,13 +117,13 @@
         </div>
     </div>
     <!-- Toast Container -->
-    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1200">
+    <!-- <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1200">
         <div *ngIf="showToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-body">
                 {{ toastMessage }}
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 
 <!-- Modal para ingresar nombre de configuración -->
@@ -151,7 +146,12 @@
         <button type="button" class="btn btn-danger" (click)="modal.dismiss()">Cancelar</button>
         <button type="button" class="btn btn-primary" [disabled]="!nombreConfiguracion?.trim()"
             (click)="saveConfigName(modal)">
-            <i class="bi bi-check-lg me-1"></i> Guardar nombre
+            <i class="bi bi-check-lg me-1"></i>                                 @if (isLoading) {
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Registrando...
+                                } @else {
+                                Registar
+                                }
         </button>
     </div>
 </ng-template>
@@ -190,6 +190,39 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-success" (click)="modal.close()"
                 (click)="configAlert()">Continuar</button>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Modal de error -->
+ <ng-template #modalError let-modal>
+    <div class="modal-content border-0">
+        <!-- <div class="modal-header border-0 pb-0">
+            <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+        </div> -->
+        
+        <div class="modal-body text-center px-4">
+            <div class="error-icon mb-3">
+                <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
+            </div>
+            
+            <h4 class="fw-bold text-danger mb-3">¡No se puede registrar configuaración!</h4>
+            
+            <div class="alert alert-danger border-danger bg-danger-light">
+                <p class="mb-1"><strong>Por favor intentelo nuevamente</strong></p>
+                <!-- <p class="small mb-0">El usuario o contraseña ingresados no son válidos.</p> -->
+            </div>
+
+  
+        </div>
+
+        <div class="modal-footer border-top-0 d-flex justify-content-center">
+            <button type="button" 
+                    class="btn btn-danger px-4 py-2 fw-bold"
+                    (click)="modal.close()">
+                <i class="bi bi-arrow-counterclockwise me-2"></i>
+                Intentar nuevamente
+            </button>
         </div>
     </div>
 </ng-template>

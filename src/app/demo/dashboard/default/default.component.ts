@@ -16,6 +16,8 @@ import { ChartDataMonthComponent } from 'src/app/theme/shared/components/apexcha
 })
 export class DefaultComponent {
   // public method
+    isLoading = false;
+
   ListGroup = [
     {
       name: 'CAT CHOW VIDA SANA X 1 3 KGS',
@@ -77,4 +79,21 @@ export class DefaultComponent {
       color: 'text-warning'
     }
   ];
+
+  descargarInforme() {
+  // Lógica para generar/descargar el informe
+  console.log("Generando informe...");
+  // Ejemplo con un servicio:
+  // this.informeService.generarPDF().subscribe(blob => {
+  //   saveAs(blob, 'informe-productos.pdf');
+  // });
+
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+      console.log("Informe generado.");
+    }
+    , 2000); // Simulando un retraso de 2 segundos
+
+}
 }
