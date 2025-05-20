@@ -9,6 +9,7 @@ export class ServiceGeneralService {
   private authUrl = 'https://smartstockv2-cweudvaub2hxa8cf.canadacentral-01.azurewebsites.net/api/auth/log-in';
   private registarAlert = 'https://smartstockv2-cweudvaub2hxa8cf.canadacentral-01.azurewebsites.net/api/alerts/register-alert';
   private notificationsUrl = 'https://smartstockv2-cweudvaub2hxa8cf.canadacentral-01.azurewebsites.net/api/notificaciones'; // URL corregida
+  private urlconfigIA = 'https://smartstockv2-cweudvaub2hxa8cf.canadacentral-01.azurewebsites.net/api/prediction/register-prediction';
 
   constructor(private http: HttpClient) { }
 
@@ -25,7 +26,7 @@ export class ServiceGeneralService {
   }
 
   configIA(configData: any): Observable<any> {
-    return this.http.post<any>(this.authUrl, configData, {
+    return this.http.post<any>(this.urlconfigIA, configData, {
       headers: this.getHeaders()
     });
   }
@@ -38,7 +39,7 @@ export class ServiceGeneralService {
   }
 
   registerAlert(dataAlert: any): Observable<any> {
-    console.log('Enviando notificación:', dataAlert);
+    // console.log('Enviando notificación:', dataAlert);
     return this.http.post<any>(this.registarAlert, dataAlert, {
       headers: this.getHeaders()
     });

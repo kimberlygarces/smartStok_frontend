@@ -108,7 +108,7 @@ export class AlertsRegisterComponent {
 
 
     private registerAlert(dataAlert: any, modalContent: any): void {
-    console.log(dataAlert);
+    // console.log(dataAlert);
     // Obtener el username del localStorage de forma segura
     const getUsernameFromStorage = (): string => {
       try {
@@ -130,7 +130,7 @@ export class AlertsRegisterComponent {
     };
   
     const dataRequest = {
-    username: getUsernameFromStorage(),
+    username: 'kgarcesp', //getUsernameFromStorage(),
     consecutiveCommunication: dataAlert.medio,
     periodicity: dataAlert.periodicidad,
     motive: dataAlert.motivo,
@@ -169,9 +169,9 @@ export class AlertsRegisterComponent {
     try {
       const notificacion = this.crearNotificacion();
       console.log('Datos a enviar:', notificacion);
-      this.enviarNotificacion(notificacion, modalContent);
+      // this.enviarNotificacion(notificacion, modalContent);
 
-      // this.registerAlert(this.alertaForm.value, modalContent);
+      this.registerAlert(this.alertaForm.value, modalContent);
 
     } catch (error) {
       console.error('Error al crear notificación:', error);
