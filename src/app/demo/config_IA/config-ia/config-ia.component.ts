@@ -18,6 +18,7 @@ import { ServiceGeneralService } from '../../../theme/shared/service/service-gen
 export class ConfigIaComponent {
   @ViewChild('modalContent', { static: true }) modalContent: any;
   @ViewChild('nameConfigModal', { static: true }) nameConfigModal: any;
+  @ViewChild('modalError', { static: true }) modalError: any;
 
   nombreConfiguracion: string = '';
   showToast = false;
@@ -167,7 +168,7 @@ export class ConfigIaComponent {
       this.showToastMessage('Por favor completa todos los campos requeridos', false);
       return;
     }
-    this.openNameConfigModal(this.nameConfigModal);
+    // this.openNameConfigModal(this.nameConfigModal);
   }
 
   saveConfigName(modal: any) {
@@ -176,7 +177,6 @@ export class ConfigIaComponent {
       return;
     }
 
-    modal.close();
 
     // Obtener el username del localStorage de forma segura
     const getUsernameFromStorage = (): string => {
@@ -211,22 +211,26 @@ export class ConfigIaComponent {
       username: getUsernameFromStorage() // Obtenemos el username correctamente
     };
 
-    console.log('Datos a enviar:', configData); // Para depuración
+    // console.log('Datos a enviar:', configData); // Para depuración
 
     this.isLoading = true;
 
     this._serviceGeneral.configIA(configData).subscribe({
       next: (respuesta) => {
-console.log(respuesta)
+        // console.log(respuesta)
 
         this.isLoading = false;
         this.openModal(this.modalContent);
-        this.showToastMessage('Configuración guardada exitosamente!');
+
       },
       error: (error) => {
         console.error('Error en registro:', error);
         this.isLoading = false;
-        this.showToastMessage('Error al guardar la configuración', false);
+        this.openModalError(this.modalError);
+        this.modalContent.close();
+        modal.close();
+
+
       }
     });
   }
@@ -270,6 +274,16 @@ console.log(respuesta)
     });
   }
 
+  openModalError(content: any) {
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      size: 'sm', // Puedes cambiar a 'lg', 'xl' o dejarlo vacío para el tamaño por defecto
+      scrollable: true, // Esto habilita el scroll dentro del modal si el contenido es muy largo
+      backdrop: 'static', // Esto evita que el modal se cierre al hacer clic fuera
+      keyboard: false, // Esto evita que el modal se cierre con la tecla ESC
+      centered: true
+    });
+  }
   openModal(content: any) {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',

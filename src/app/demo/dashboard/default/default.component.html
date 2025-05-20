@@ -56,6 +56,7 @@
         </div>
       </div>
     </div>
+    
   </div>
 
   <!-- <div class="col-xl-8 col-md-12">
@@ -68,6 +69,19 @@
           <div class="col">
             <h4>Productos Destacados</h4>
           </div>
+          <div class="col-auto">
+          <!-- Botón "Descargar Informe" -->
+          <button class="btn btn-primary btn-sm"                 [disabled]="isLoading"
+ (click)="descargarInforme()">
+            <i class="ti ti-download me-1"></i>
+                  @if (isLoading) {
+                  <span class="spinner-border spinner-border-sm" role="status"></span>
+                   Descargando...
+                } @else {
+                   Descargar Informe
+                }
+          </button>
+        </div>
           <div class="col-auto"></div>
         </div>
         <div class="rounded bg-light-secondary overflow-hidden mb-3">

@@ -6,15 +6,19 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ServiceGeneralService {
-  private apiUrl = 'https://smartstockv2-cweudvaub2hxa8cf.canadacentral-01.azurewebsites.net/api/auth/log-in';
+  private authUrl = 'https://smartstockv2-cweudvaub2hxa8cf.canadacentral-01.azurewebsites.net/api/auth/log-in';
+  private registarAlert = 'https://smartstockv2-cweudvaub2hxa8cf.canadacentral-01.azurewebsites.net/api/alerts/register-alert';
+  private notificationsUrl = 'https://smartstockv2-cweudvaub2hxa8cf.canadacentral-01.azurewebsites.net/api/notificaciones'; // URL corregida
+  private urlconfigIA = 'https://smartstockv2-cweudvaub2hxa8cf.canadacentral-01.azurewebsites.net/api/prediction/register-prediction';
 
   constructor(private http: HttpClient) { }
 
   private getAuthToken(): string {
     try {
-      // Obtener el token del localStorage - nota el nombre exacto 'autnResponse'
       const authData = JSON.parse(localStorage.getItem('autnResponse') || '{}');
-      return authData.token || authData.jwt || ''; // Intenta con ambos nombres por si acaso
+      console.log('AuthData:', authData);
+
+      return authData.token || authData.jwt || '';
     } catch (e) {
       console.error('Error al obtener el token:', e);
       return '';
@@ -22,16 +26,33 @@ export class ServiceGeneralService {
   }
 
   configIA(configData: any): Observable<any> {
+    return this.http.post<any>(this.urlconfigIA, configData, {
+      headers: this.getHeaders()
+    });
+  }
+
+  sendAlerts(notificationData: any): Observable<any> {
+    // console.log('Enviando notificación:', notificationData);
+    return this.http.post<any>(this.notificationsUrl, notificationData, {
+      headers: this.getHeaders()
+    });
+  }
+
+  registerAlert(dataAlert: any): Observable<any> {
+    // console.log('Enviando notificación:', dataAlert);
+    return this.http.post<any>(this.registarAlert, dataAlert, {
+      headers: this.getHeaders()
+    });
+  }
+
+
+  private getHeaders(): HttpHeaders {
     const token = this.getAuthToken();
-    
-    // Crear headers con el token
-    const headers = new HttpHeaders({
+    // console.log('Token usado:', token ? '*****' + token.slice(-5) : 'NO TOKEN');
+
+    return new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
-
-    console.log('Enviando configuración IA con token:', token ? '*****' + token.slice(-5) : 'NO TOKEN');
-
-    return this.http.post<any>(this.apiUrl, configData, { headers });
   }
 }

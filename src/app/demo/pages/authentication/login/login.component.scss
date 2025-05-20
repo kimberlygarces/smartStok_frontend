@@ -1,12 +1,45 @@
-.user-not-found{
-    color: red;
-    font-size: 12px;
-    margin-top: 15px;
-    justify-content: center;
-    display: flex;
-    text-align: center;
-// animate__bounceInLeft;
-    animation: bounceInLeft; /* referring directly to the animation's @keyframe declaration */
-  animation-duration: 1s; /* don't forget to set a duration! */
+.alerts_div{
+    margin: 2%;
+    h2{
+        font-size: 30px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+    // .card-header{
     
+    //     // background: rgb(233, 238, 233);
+    //     // background: linear-gradient(0deg, rgba(218, 230, 219, 0.768) 0%, rgba(211, 238, 206, 0.575) 100%);
+    // }
+
+
+}
+
+.img-alerts_container{
+    text-align: right;
+    margin: 2%;
+        .img-alerts{
+            filter: blur(0px);
+            width: 30%;
+      
+        }
+    }
+ .form-select:invalid {
+  color: #6c757d; /* Color gris para texto de placeholder */
+}
+
+.btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.modal-body {
+  i.bi-check-circle-fill {
+    animation: bounceIn 0.5s;
+  }
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
 }
