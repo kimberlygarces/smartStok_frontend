@@ -41,11 +41,11 @@ export class AlertsRegisterComponent {
   ];
   
   motivos = [
-    { id: 1, nombre: 'Predicción prueba' },
-    { id: 2, nombre: 'Día del gato' },
-    { id: 3, nombre: 'Predicción Premiun' }
-  ];
-
+    { id: 1, nombre: 'Cat chow' },
+    { id: 2, nombre: 'Predicción prueba' },
+    { id: 3, nombre: 'Día del gato' },
+    { id: 4, nombre: 'Predicción Premiun' }
+  ]
   tiposAlerta = [
     { id: 1, nombre: 'Informativa' },
     { id: 2, nombre: 'Preventiva' },
@@ -81,7 +81,7 @@ export class AlertsRegisterComponent {
 
     return {
       usuario: usuarioSeleccionado.nombre,
-      producto: 'Cuido canino',
+      producto: 'Cat chow',
       numeroTelefono: usuarioSeleccionado.telefono,
       email: usuarioSeleccionado.email,
       tipoAlerta: tipoAlertaSeleccionado.nombre,

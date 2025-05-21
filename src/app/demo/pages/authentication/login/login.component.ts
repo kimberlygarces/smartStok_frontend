@@ -35,14 +35,14 @@ export class LoginComponent {
       role: 'user'
     },
     {
-      email: 'andres.rivero@example.com',
-      password: 'rivero123',
+      email: 'andresrivero990729@gmail.com',
+      password: 'andres12345',
       username: 'Andres Rivero',
       role: 'user'
     },
     {
-      email: 'andres.restrepo@example.com',
-      password: 'restrepo123',
+      email: 'ardavid9801@gmail.com',
+      password: 'andres2',
       username: 'Andres Restrepo',
       role: 'user'
     }

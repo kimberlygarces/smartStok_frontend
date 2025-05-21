@@ -43,6 +43,13 @@ export class AlertsListComponent {
       periodicidad: 'Diaria',
       configuracion: 'Predicción Prueba',
       activo: true
+    },
+    {
+      usuario: 'Kimberly Garces',
+      medio: 'Correo electrónico',
+      periodicidad: 'Diaria',
+      configuracion: 'Cat chow',
+      activo: true
     }
   ];
 

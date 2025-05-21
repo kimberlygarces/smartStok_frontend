@@ -19,27 +19,35 @@ export class ListUserComponent {
   clientes = [
     {
       id: 1,
-      firstName: 'Juan',
-      lastName: 'Pérez',
-      email: 'juan.perez@example.com',
+      firstName: 'Andres',
+      lastName: 'Rivero',
+      email: 'andresrivero990729@gmail.com',
       celular: '3001234567',
       activo: true
     },
     {
       id: 2,
-      firstName: 'María',
-      lastName: 'Gómez',
-      email: 'maria.gomez@example.com',
+      firstName: 'Andres',
+      lastName: 'Restrepo',
+      email: 'ardavid9801@gmail.com',
       celular: '3102345678',
       activo: true
     },
     {
       id: 3,
-      firstName: 'Carlos',
-      lastName: 'Rodríguez',
-      email: 'carlos.rodriguez@example.com',
+      firstName: 'Kimberly',
+      lastName: 'Garces',
+      email: 'kimberlygarces1994@gmail.com',
       celular: '3203456789',
-      activo: false
+      activo: true
+    },
+    {
+      id: 4,
+      firstName: 'Mariutsi',
+      lastName: 'Garces',
+      email: 'mariutsi@mail.com',
+      celular: '3210000000',
+      activo: true
     }
   ];
 
