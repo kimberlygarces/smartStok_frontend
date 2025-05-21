@@ -7,7 +7,7 @@
 
 // BLUE Primary Color
 
-$blue-700: #1c76da;
+$blue-700: #8dbd77;
 $purple-500: #673ab7;
 $purple-700: #542ca7;
 
@@ -32,7 +32,7 @@ $colors: (
 );
 
 $primary: $blue; // change
-$secondary: $indigo; // change
+$secondary: $blue-700; // change
 
 // scss-docs-start theme-colors-map
 $theme-colors: (

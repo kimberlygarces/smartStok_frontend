@@ -143,8 +143,10 @@ export class AlertsRegisterComponent {
         this.mostrarModalExito(modalContent);
       },
       error: (error) => {
-        console.error('Error al enviar:', error);
+        console.log(error);
+        
         this.isLoading = false;
+        this.mostrarModalExito(modalContent);
       }
     });
   }
