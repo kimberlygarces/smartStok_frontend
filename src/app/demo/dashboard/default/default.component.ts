@@ -21,7 +21,7 @@ export class DefaultComponent {
   ListGroup = [
     {
       name: 'CAT CHOW VIDA SANA X 1 3 KGS',
-      profit: '10% Profit',
+      profit: '10% inventario',
       invest: '$1839.00',
       bgColor: 'bg-light-success',
       icon: 'ti ti-chevron-up',
@@ -29,7 +29,7 @@ export class DefaultComponent {
     },
     {
       name: 'EXCELLENT FORMULA ADULT MAINTENANCE 8 KG',
-      profit: '10% Loss',
+      profit: '10% inventario',
       invest: '$100.00',
       bgColor: 'bg-light-danger',
       icon: 'ti ti-chevron-down',
@@ -37,7 +37,7 @@ export class DefaultComponent {
     },
     {
       name: 'LADRINA CARNE PARRILLA+VEGETALES X22 7KG',
-      profit: '10% Profit',
+      profit: '10% inventario',
       invest: '$200.00',
       bgColor: 'bg-light-success',
       icon: 'ti ti-chevron-up',
@@ -45,7 +45,7 @@ export class DefaultComponent {
     },
     {
       name: 'ATGL',
-      profit: '10% Loss',
+      profit: '6% inventario',
       invest: '$189.00',
       bgColor: 'bg-light-danger',
       icon: 'ti ti-chevron-down',
@@ -53,7 +53,7 @@ export class DefaultComponent {
     },
     {
       name: 'CAT CHOW GATITOS F D X 1 5 GR',
-      profit: '10% Profit',
+      profit: '5% inventario',
       invest: '$210.00',
       bgColor: 'bg-light-success',
       icon: 'ti ti-chevron-up',
@@ -80,7 +80,7 @@ export class DefaultComponent {
     }
   ];
 
-  descargarInforme() {
+  sendInforme() {
   // Lógica para generar/descargar el informe
   console.log("Generando informe...");
   // Ejemplo con un servicio:

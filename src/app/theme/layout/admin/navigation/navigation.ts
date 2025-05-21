@@ -76,7 +76,7 @@ export const NavigationItems: NavigationItem[] = [
   id: 'alertas_reportes',
   title: 'Alertas y Reportes',
   type: 'collapse',
-  icon: '<ti ti-bell>',
+  icon: 'ti ti-bell',
   children: [
     {
       id: 'crear_alerta',

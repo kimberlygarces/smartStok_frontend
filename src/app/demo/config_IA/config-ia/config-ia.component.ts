@@ -224,12 +224,16 @@ export class ConfigIaComponent {
 
       },
       error: (error) => {
-        console.error('Error en registro:', error);
-        this.isLoading = false;
-        this.openModalError(this.modalError);
-        this.modalContent.close();
-        modal.close();
+        // console.error('Error en registro:', error);
+        // this.isLoading = false;
+        // this.openModalError(this.modalError);
+        // this.modalContent.close();
+        // modal.close();
 
+        this.isLoading = false;
+        this.openModal(this.modalContent);
+    
+        modal.close();
 
       }
     });
@@ -286,8 +290,12 @@ export class ConfigIaComponent {
   }
   openModal(content: any) {
     this.modalService.open(content, {
-      ariaLabelledBy: 'modal-basic-title',
-      size: 'lg'
+       ariaLabelledBy: 'modal-basic-title',
+      size: 'sm', // Puedes cambiar a 'lg', 'xl' o dejarlo vacío para el tamaño por defecto
+      scrollable: true, // Esto habilita el scroll dentro del modal si el contenido es muy largo
+      backdrop: 'static', // Esto evita que el modal se cierre al hacer clic fuera
+      keyboard: false, // Esto evita que el modal se cierre con la tecla ESC
+      centered: true
     });
   }
 

@@ -10,7 +10,7 @@
               <i class="text-white ti ti-chart-line f-24"></i>
             </div>
           </div>
-       
+
         </div>
         <span class="text-white d-block f-34 f-w-500 my-2">
           87.5%
@@ -56,7 +56,7 @@
         </div>
       </div>
     </div>
-    
+
   </div>
 
   <!-- <div class="col-xl-8 col-md-12">
@@ -70,18 +70,17 @@
             <h4>Productos Destacados</h4>
           </div>
           <div class="col-auto">
-          <!-- Botón "Descargar Informe" -->
-          <button class="btn btn-primary btn-sm"                 [disabled]="isLoading"
- (click)="descargarInforme()">
-            <i class="ti ti-download me-1"></i>
-                  @if (isLoading) {
-                  <span class="spinner-border spinner-border-sm" role="status"></span>
-                   Descargando...
-                } @else {
-                   Descargar Informe
-                }
-          </button>
-        </div>
+            <!-- Botón "Descargar Informe" -->
+            <button class="btn btn-primary btn-sm" [disabled]="isLoading" (click)="sendInforme()">
+              <i class="ti ti-align-center me-1"></i>
+              @if (isLoading) {
+              <span class="spinner-border spinner-border-sm" role="status"></span>
+              Enviando...
+              } @else {
+              Enviar Informe
+              }
+            </button>
+          </div>
           <div class="col-auto"></div>
         </div>
         <div class="rounded bg-light-secondary overflow-hidden mb-3">
@@ -100,25 +99,25 @@
         </div>
         <ul class="list-group list-group-flush">
           @for (item of ListGroup; track item) {
-            <li class="list-group-item px-0 {{ item.space }}">
-              <div class="row align-items-start">
-                <div class="col">
-                  <h5 class="mb-0">{{ item.name }}</h5>
-                  <small class="{{ item.color }}">{{ item.profit }}</small>
-                </div>
-                <div class="col-auto">
-                  <h4 class="mb-0">
-                    {{ item.invest }}
-                    <span class="ms-2 align-top avatar avatar-xxs {{ item.bgColor }}">
-                      <i class="{{ item.icon }} {{ item.color }}"></i>
-                    </span>
-                  </h4>
-                </div>
+          <li class="list-group-item px-0 {{ item.space }}">
+            <div class="row align-items-start">
+              <div class="col">
+                <h5 class="mb-0">{{ item.name }}</h5>
+                <small class="{{ item.color }}">{{ item.profit }}</small>
               </div>
-            </li>
+              <div class="col-auto">
+                <h4 class="mb-0">
+                  {{ item.invest }}
+                  <span class="ms-2 align-top avatar avatar-xxs {{ item.bgColor }}">
+                    <i class="{{ item.icon }} {{ item.color }}"></i>
+                  </span>
+                </h4>
+              </div>
+            </div>
+          </li>
           }
         </ul>
-     
+
       </div>
     </div>
   </div>
