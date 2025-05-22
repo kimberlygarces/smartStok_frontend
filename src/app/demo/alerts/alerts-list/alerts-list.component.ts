@@ -21,21 +21,21 @@ export class AlertsListComponent {
       medio: 'Correo electrónico',
       periodicidad: 'Diaria',
       configuracion: 'Día del perro',
-      activo: true
+      activo: false
     },
     {
       usuario: 'Andres Restrepo',
       medio: 'Correo electrónico',
       periodicidad: 'Diaria',
       configuracion: 'Productos Premiun',
-      activo: true
+      activo: false
     },
     {
       usuario: 'Andres Rivero',
       medio: 'Correo electrónico',
       periodicidad: 'Diaria',
       configuracion: 'Productos general',
-      activo: true
+      activo: false
     },
     {
       usuario: 'Kimberly Garces',
@@ -49,6 +49,14 @@ export class AlertsListComponent {
       medio: 'Correo electrónico',
       periodicidad: 'Diaria',
       configuracion: 'Cat chow',
+      activo: true
+    },
+    
+    {
+      usuario: 'Kimberly Garces',
+      medio: 'Correo electrónico',
+      periodicidad: 'Diaria',
+      configuracion: 'Dog Chow',
       activo: true
     }
   ];

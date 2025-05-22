@@ -41,10 +41,11 @@ export class AlertsRegisterComponent {
   ];
   
   motivos = [
-    { id: 1, nombre: 'Cat chow' },
-    { id: 2, nombre: 'Predicción prueba' },
-    { id: 3, nombre: 'Día del gato' },
-    { id: 4, nombre: 'Predicción Premiun' }
+    { id: 1, nombre: 'Dog Chow' },
+    { id: 2, nombre: 'Cat chow' },
+    { id: 3, nombre: 'Predicción prueba' },
+    { id: 4, nombre: 'Día del gato' },
+    { id: 5, nombre: 'Predicción Premiun' }
   ]
   tiposAlerta = [
     { id: 1, nombre: 'Informativa' },

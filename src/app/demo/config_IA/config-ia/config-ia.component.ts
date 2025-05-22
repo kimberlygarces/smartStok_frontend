@@ -221,6 +221,7 @@ export class ConfigIaComponent {
 
         this.isLoading = false;
         this.openModal(this.modalContent);
+        modal.close();
 
       },
       error: (error) => {
